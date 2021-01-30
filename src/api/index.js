@@ -1,6 +1,9 @@
 import axios from 'axios';
 
-const BASE = 'placeholder'
+const BASE = 'https://strangers-things.herokuapp.com/api/2010-LSU-RM-WEB-PT';
+const posts = `${BASE}/posts`;
+const register = `${BASE}/users/register`;
+const loggedInUser = `${BASE}/users/me`;
 
 export async function getUsers() {
   try {
