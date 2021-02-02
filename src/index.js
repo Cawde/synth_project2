@@ -8,8 +8,8 @@ import {
 } from 'react-router-dom';
 
 import { 
-  Header,
   Home,
+  Header,
   Listings,
   Profile,
   Login,
@@ -19,39 +19,63 @@ import {
 const App = () => {
   //Potential state
   //Logged in or not
-  const [logIn, setLogIn] = useState(false);
+  const [login, setLogin] = useState(false);
+  const [search, setSearch] = useState('');
+  const [user, setUser] = useState('');
+  const [posts, setPosts] = useState('');
+  const [messages, setMessages] = useState('');
+  const [submittedSuccessful, setSubmittedSuccessful] = useState(false);
+  const [token, setToken] = useState('');
+  const [listings, setListings] = useState('');
   //user information
+  //create log out function that calls all pieces of state back to their original.
+  //clear local storage
+  const logOut = () => {
+    setLogin(false);
+    setSearch('');
+    setUser('');
+    setPosts('');
+    setMessages('');
+    setSubmittedSuccessful(false);
+    setToken('');
+    setListings('');
+  }
 
   return (
     <div className="app">
       <Header/>
-      {/* <Button color="primary">Hello World</Button> */}
       <Router>
         <nav>
           <ul className="links">
             <li><Link to="/home">Home</Link></li>
             <li><Link to="/profile">Profile</Link></li>
+            {/* {logIn ? <li><Link to="/profile">Profile</Link></li> : null} */}
             <li><Link to="/listings">Listings</Link></li>
-            <li><Link to="/login">Login</Link></li>
+            {/* set the state back to normal */}
+            {submittedSuccessful ? <li onClick={logOut}>Log Out</li> : <li><Link to="/login">Login</Link></li>}
+            {submittedSuccessful ? <li className="user">Hi, {user}</li>: null}
           </ul>
-          <div className="input-div">
-            <form className="input-box">
-              <label>Search for listings</label>
-              <input/>
-            </form>
-          </div>
         </nav>
         <Route path="/home">
-          <Home/>
+          <Home search={search} setSearch={setSearch}/>
         </Route>
         <Route path="/profile">
           <Profile/>
         </Route>
         <Route path="/listings">
-          <Listings/>
+          <Listings listings={listings} setListings={setListings}/>
         </Route>
         <Route path="/login">
-          <Login/>
+          <Login 
+            token={token}
+            setToken={setToken}
+            login={login} 
+            setLogin={setLogin} 
+            user={user} 
+            setUser={setUser}
+            submittedSuccessful={submittedSuccessful} 
+            setSubmittedSuccessful={setSubmittedSuccessful}
+          />
         </Route>
       </Router>
     </div>
