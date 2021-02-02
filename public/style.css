@@ -1,6 +1,7 @@
 body {
-    background: rgb(34, 30, 30);
+    background: #522622;
     color: white;
+    font-family: 'Sriracha', cursive;
 
 }
 
@@ -18,15 +19,22 @@ nav a {
     text-decoration: none;
     color:white;
     padding: 1px 30px;
+    font-size: 30px;
 }
 
 a:hover {
-    color: red;
+    color:#FF837A;
 }
 
 h1 {
     color: white;
     text-align: center;
+    letter-spacing: 0.5rem;
+    font-size: 50px;
+}
+
+h3 {
+    font-size: 25px;
 }
 
 .header {
@@ -124,3 +132,93 @@ hr {
     opacity:1;
 }
 
+.object-listings {
+    display:flex;
+    flex-direction: column;
+    flex: 1 0 100px;
+}
+
+.title {
+    display: flex;
+    justify-items: center;
+    
+}
+
+.content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 2px;
+    margin-top: 0px;
+    margin-left: 10px;
+}
+
+.price {
+    color: #2D8557;
+}
+
+.details {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    background: #FFE4D6;
+    color: black;
+    box-shadow: 10px 4px 4px black;
+    padding: 10px;
+}
+ span p {
+    display: inline;
+ }
+
+/* .object-listings {
+    flex-grow: 1;
+  
+    display: grid;
+  
+    grid-template-columns: minmax(0, 1fr) 420px;
+    grid-template-rows: auto minmax(0, 1fr);
+
+    box-shadow: 0 4px 12px -3px black;
+} */
+  
+/* .object-listings > * {
+    padding: 8px;
+}
+  
+.object-listings header {
+    grid-row: 1;
+    grid-column: 1 / -1;
+  
+    background: steelblue;
+    color: white;
+    text-shadow: 1px 1px 2px black;
+    border-bottom: 1px solid black;
+  
+    font-size: 1.4rem;
+}
+  
+.object-listings .details {
+    grid-row: 2;
+    grid-column: 1;
+  
+    min-height: 0;
+    overflow-y: scroll;
+  
+    font-size: 1.2rem;
+  
+    display: grid;
+    grid-gap: 4px 12px;
+    grid-template-columns: max-content minmax(0, 1fr);
+    grid-template-rows: repeat(auto-fill, 2em);
+}
+
+.object-listings .details .title {
+    grid-column: 1;
+    font-weight: 900;
+}
+  
+.object-listings .details .content {
+    grid-column: 2;
+    font-weight: 100;
+}
+   */

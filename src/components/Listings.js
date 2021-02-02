@@ -3,56 +3,54 @@ import { useEffect } from 'react';
 
 const Listings = (props) => {
   const {listings, setListings} = props;
-  // const {author, createdAt, description, isAuthor, location, messages, price, title, updatedAt, willDeliver} = props.data.posts;
   useEffect(() => {
     fetch('https://strangers-things.herokuapp.com/api/2010-LSU-RM-WEB-PT/posts')
     .then(response => response.json())
     .then(data => {
-      setListings(data.posts)
-      console.log(data);
+      setListings(data.data.posts)
+      console.log(data.data.posts);
     })
   }, [])
 
-  return (
-    <div className="Listings">
-      <h1>Listings</h1>
-      {/* <header>
-          <h3>{title}</h3>
-          <h4>{dated}</h4>
-      </header>
-        <section className="facts">
-          <Fragment>
-            <span className="title">{title ? 'Title' : ''}</span>
-            <span className="content">{title ? title : ''}</span>
+  return listings ? (
+    <main id="listings">
+      <div className="object-listings">
+        <h1>Listings</h1>
+        <Fragment>
+            {listings ? listings.map((listing, index) => {
+              return (
+                <Fragment key={index}>
+                  <header>
+                      <h3>{listing.title}</h3>
+                      <h4>Post Date: {listing.createdAt}</h4>
+                  </header>
+                    <section className="details">
+                      <Fragment>
+                        <span className="title">{listing.description ? 'Description:' : ''}<p className="content">{listing.description ? listing.description : ''}</p></span>
+                      </Fragment>
+                      <Fragment>
+                        <span className="title">{listing.author.username ? "Seller:" : ''}<p className="content">{listing.author.username ? listing.author.username : ''}</p></span>  
+                      </Fragment>
+                      <Fragment>
+                        <span className="title">{listing.location ? "Location:" : ''}</span>
+                      </Fragment>
+                      <Fragment>
+                        <span className="title">{listing.price ? "Price:" : ''}<p className="content price">{listing.price ? listing.price : ''}</p></span>
+                      </Fragment>
+                      <Fragment>
+                        <span className="title">{listing.updatedAt ? "Updated At:" : ''}<p className="content">{listing.updatedAt ? listing.updatedAt : ''}</p></span>
+                      </Fragment>
+                      <Fragment>
+                        <span className="title">{listing.willDeliver ? "Will Deliver:" : ''}<p className="content">{listing.willDeliver ? listing.willDeliver : ''}</p></span>
+                      </Fragment>
+                    </section>
+                </Fragment>
+              )
+            }): null}  
           </Fragment>
-          <Fragment>
-            <span className="title">{description ? 'Description' : ''}</span>
-            <span className="content">{description ? description : ''}</span>
-          </Fragment>
-          <Fragment>
-            <span className="title">{author ? "Author" : ''}</span>
-          </Fragment>
-          <Fragment>
-            <span className="title">{createdAt ? "Time posted" : ''}</span>
-            <span className="content">{createdAt ? createdAt : ''}</span>
-          </Fragment>
-          <Fragment>
-            <span className="title">{location ? "Location" : ''}</span>
-          </Fragment>
-          <Fragment>
-            <span className="title">{price ? "Price" : ''}</span>
-            <span className="content">{price ? price : ''}</span>
-          </Fragment>
-          <Fragment>
-            <span className="title">{updatedAt ? "Updated At" : ''}</span>
-            <span className="content">{updatedAt ? updatedAt : ''}</span>
-          </Fragment>
-          <Fragment>
-            <span className="title">{willDeliver ? "willDeliver" : ''}</span>
-            <span className="content">{willDeliver ? willDeliver : ''}</span>
-          </Fragment>
-        </section> */}
-    </div>
-  )
+
+      </div>
+    </main>
+  ) : null;
 }
 export default Listings;
