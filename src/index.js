@@ -19,26 +19,24 @@ import {
 const App = () => {
   //Potential state
   //Logged in or not
-  const [login, setLogin] = useState(false);
   const [search, setSearch] = useState('');
   const [user, setUser] = useState('');
+  const [user_id, setUserId] = useState('');
   const [posts, setPosts] = useState('');
   const [messages, setMessages] = useState('');
-  const [submittedSuccessful, setSubmittedSuccessful] = useState(false);
-  const [token, setToken] = useState('');
+  const [loginSuccessful, setLoginSuccessful] = useState(false);
   const [listings, setListings] = useState('');
   //user information
   //create log out function that calls all pieces of state back to their original.
   //clear local storage
   const logOut = () => {
-    setLogin(false);
     setSearch('');
     setUser('');
     setPosts('');
     setMessages('');
-    setSubmittedSuccessful(false);
-    setToken('');
+    setLoginSuccessful(false);
     setListings('');
+    setUserId('');
   }
 
   return (
@@ -52,8 +50,7 @@ const App = () => {
             {/* {logIn ? <li><Link to="/profile">Profile</Link></li> : null} */}
             <li><Link to="/listings">Listings</Link></li>
             {/* set the state back to normal */}
-            {submittedSuccessful ? <li onClick={logOut}>Log Out</li> : <li><Link to="/login">Login</Link></li>}
-            {submittedSuccessful ? <li className="user">Hi, {user}</li>: null}
+            {loginSuccessful ? <li onClick={logOut}><a href="#">Log Out of {user}</a></li> : <li><Link to="/login">Login</Link></li>}
           </ul>
         </nav>
         <Route path="/home">
@@ -63,18 +60,16 @@ const App = () => {
           <Profile/>
         </Route>
         <Route path="/listings">
-          <Listings listings={listings} setListings={setListings}/>
+          <Listings listings={listings} setListings={setListings} user_id={user_id} setUserId={setUserId}/>
         </Route>
         <Route path="/login">
           <Login 
-            token={token}
-            setToken={setToken}
-            login={login} 
-            setLogin={setLogin} 
             user={user} 
             setUser={setUser}
-            submittedSuccessful={submittedSuccessful} 
-            setSubmittedSuccessful={setSubmittedSuccessful}
+            loginSuccessful={loginSuccessful} 
+            setLoginSuccessful={setLoginSuccessful}
+            user_id={user_id}
+            setUserId={setUserId}
           />
         </Route>
       </Router>

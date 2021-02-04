@@ -3,70 +3,64 @@ import { Redirect } from 'react-router-dom';
 
 
 const Login = (props) => {
-  const {token, setToken, user, setUser, login, setLogin, submittedSuccessful, setSubmittedSuccessful} = props;
-  const [pass, setPass] = useState('');
-  
+  const {user, setUser, loginSuccessful, setLoginSuccessful, user_id, setUserId} = props;
+  let pass = '';
+
+  const storeToken = (token) => {
+    localStorage.setItem('token', token);
+  }
 
   const registerUser = (event) => {
-    //check if user entered user/pass
-    //ajax request to back end
-    //backend response will give authentication or not
     event.preventDefault();
-    try {
-      fetch("https://strangers-things.herokuapp.com/api/2010-LSU-RM-WEB-PT/users/register", {
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          user: {
-            username: user,
-            password: pass
-          }
-        })
-      }).then(response => response.json())
-        .then(result => {
-          console.log(result);
-          alert(result.success ? result.data.message : result.error.message);
-          console.log(user, pass);
-        }) 
-    } catch (error) {
-      console.error(error);
-    }
+    fetch("https://strangers-things.herokuapp.com/api/2010-LSU-RM-WEB-PT/users/register", {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        user: {
+          username: user,
+          password: pass
+        }
+      })
+    }).then(response => response.json())
+      .then(result => {
+        console.log(result);
+        alert(result.success ? result.data.message : result.error.message);
+        setLoginSuccessful(result.success);
+        setUserId(result.data._id)
+        if (loginSuccessful) {
+          storeToken(result.data.token);
+        }
+      }).catch(console.error);
   }
   
-  const loginUser = (event) => {
-    event.preventDefault();
-    try {
-      fetch("https://strangers-things.herokuapp.com/api/2010-LSU-RM-WEB-PT/users/login", {
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          user: {
-            username: user,
-            password: pass
-          }
-        })
-      }).then(response => response.json())
-        .then(result => {
-          console.log(result);
-          alert(result.success ? result.data.message : result.error.message);
-          setSubmittedSuccessful(result.success);
-          console.log(user, pass);
-        }) 
-    } catch (error) {
-        console.error(error);
-    } finally {
-        if (submittedSuccessful) {
-          setToken(result.data.token);
-          console.log(token);
-          return <Redirect to="/listings"/>
-        }
-    }
-  }
+const loginUser = (event) => {
+  event.preventDefault();
+  fetch("https://strangers-things.herokuapp.com/api/2010-LSU-RM-WEB-PT/users/login", {
+    method: "POST",
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      user: {
+        username: user,
+        password: pass
+      }
+    })
+  }).then(response => response.json())
+    .then(result => {
+      console.log(result);
+      alert(result.success ? result.data.message : result.error.message);
+      setLoginSuccessful(result.success);
+      storeToken(result.data.token);
+      console.log(localStorage.getItem('token'));
+    }).catch(console.error);
+}
 
+if (loginSuccessful) {
+  return <Redirect to="/listings"/>;
+}
 
 
   return (
@@ -78,7 +72,6 @@ const Login = (props) => {
           <input 
             type="text" 
             name="uname" 
-            value={user}
             placeholder="Enter Username" required 
             onChange={(event)=> {setUser(event.target.value)}}
             />
@@ -90,9 +83,8 @@ const Login = (props) => {
             pattern=".{8,16}" 
             title="8 or more characters" 
             size="20" 
-            value={pass}
             placeholder="Enter Password" required
-            onChange={(event)=> {setPass(event.target.value)}}
+            onChange={(event)=> {pass = event.target.value}}
             />
 
           <label><b>Confirm Password</b></label>

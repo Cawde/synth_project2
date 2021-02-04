@@ -16,6 +16,7 @@ body {
 }
 
 nav a {
+    text-shadow: 2px 1px 2px black;
     text-decoration: none;
     color:white;
     padding: 1px 30px;
@@ -31,10 +32,16 @@ h1 {
     text-align: center;
     letter-spacing: 0.5rem;
     font-size: 50px;
+    text-shadow: 2px 1px 2px black;
 }
 
 h3 {
     font-size: 25px;
+    text-shadow: 2px 1px 2px black;
+}
+
+h4 {
+    text-shadow: 2px 1px 2px black;
 }
 
 .header {
