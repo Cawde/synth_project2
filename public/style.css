@@ -117,6 +117,18 @@ hr {
     opacity: 0.9;
 }
 
+.message-button {
+    box-sizing: border-box;
+    background-color: #4CAF50;
+    color: white;
+    padding: 16px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 25%;
+    opacity: 0.9;
+}
+
 .sign-in-btn {
     box-sizing: border-box;
     background-color: #c9522e;
@@ -129,12 +141,50 @@ hr {
     opacity: 0.9;
 }
 
+.delete-button {
+    box-sizing: border-box;
+    background-color: #c92e2e;
+    color: white;
+    padding: 16px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 25%;
+    opacity: 0.9;
+}
+
+.edit-button {
+    box-sizing: border-box;
+    background-color: #2e83c9;
+    color: white;
+    padding: 16px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 25%;
+    opacity: 0.9;
+}
+
 .registerbtn:hover {
     box-sizing: border-box;
     opacity:1;
 }
 
 .sign-in-btn:hover {
+    box-sizing: border-box;
+    opacity:1;
+}
+
+.edit-button:hover {
+    box-sizing: border-box;
+    opacity:1;
+}
+
+.delete-button:hover {
+    box-sizing: border-box;
+    opacity:1;
+}
+.message-button:hover {
     box-sizing: border-box;
     opacity:1;
 }

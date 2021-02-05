@@ -3,11 +3,13 @@ import { Redirect } from 'react-router-dom';
 
 
 const Login = (props) => {
-  const {user, setUser, loginSuccessful, setLoginSuccessful, user_id, setUserId} = props;
+  const {loginSuccessful, setLoginSuccessful, user_id, setUserId} = props;
   let pass = '';
+  let user = '';
 
-  const storeToken = (token) => {
+  const storeToken = (token, user) => {
     localStorage.setItem('token', token);
+    localStorage.setItem('user', user);
   }
 
   const registerUser = (event) => {
@@ -29,9 +31,7 @@ const Login = (props) => {
         alert(result.success ? result.data.message : result.error.message);
         setLoginSuccessful(result.success);
         setUserId(result.data._id)
-        if (loginSuccessful) {
-          storeToken(result.data.token);
-        }
+        storeToken(result.data.token, user);
       }).catch(console.error);
   }
   
@@ -53,7 +53,7 @@ const loginUser = (event) => {
       console.log(result);
       alert(result.success ? result.data.message : result.error.message);
       setLoginSuccessful(result.success);
-      storeToken(result.data.token);
+      storeToken(result.data.token, user);
       console.log(localStorage.getItem('token'));
     }).catch(console.error);
 }
@@ -73,7 +73,7 @@ if (loginSuccessful) {
             type="text" 
             name="uname" 
             placeholder="Enter Username" required 
-            onChange={(event)=> {setUser(event.target.value)}}
+            onChange={(event)=> {user = event.target.value}}
             />
 
           <label><b>Enter Password</b></label>

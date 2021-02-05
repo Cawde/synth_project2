@@ -4,7 +4,8 @@ import { Button } from '@material-ui/core';
 import {
   BrowserRouter as Router,
   Link,
-  Route
+  Route,
+  Redirect
 } from 'react-router-dom';
 
 import { 
@@ -20,7 +21,6 @@ const App = () => {
   //Potential state
   //Logged in or not
   const [search, setSearch] = useState('');
-  const [user, setUser] = useState('');
   const [user_id, setUserId] = useState('');
   const [posts, setPosts] = useState('');
   const [messages, setMessages] = useState('');
@@ -31,12 +31,13 @@ const App = () => {
   //clear local storage
   const logOut = () => {
     setSearch('');
-    setUser('');
     setPosts('');
     setMessages('');
     setLoginSuccessful(false);
     setListings('');
     setUserId('');
+    localStorage.clear();
+    return <Redirect to="/login"/>;
   }
 
   return (
@@ -50,22 +51,20 @@ const App = () => {
             {/* {logIn ? <li><Link to="/profile">Profile</Link></li> : null} */}
             <li><Link to="/listings">Listings</Link></li>
             {/* set the state back to normal */}
-            {loginSuccessful ? <li onClick={logOut}><a href="#">Log Out of {user}</a></li> : <li><Link to="/login">Login</Link></li>}
+            {localStorage.getItem('user') ? <li onClick={logOut}><a href="#">Log Out of {localStorage.getItem('user')}</a></li> : <li><Link to="/login">Login</Link></li>}
           </ul>
         </nav>
         <Route path="/home">
           <Home search={search} setSearch={setSearch}/>
         </Route>
         <Route path="/profile">
-          <Profile/>
+          <Profile listings={listings} setListings={setListings}/>
         </Route>
         <Route path="/listings">
           <Listings listings={listings} setListings={setListings} user_id={user_id} setUserId={setUserId}/>
         </Route>
         <Route path="/login">
           <Login 
-            user={user} 
-            setUser={setUser}
             loginSuccessful={loginSuccessful} 
             setLoginSuccessful={setLoginSuccessful}
             user_id={user_id}

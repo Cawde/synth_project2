@@ -1,4 +1,5 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
+import { Redirect } from 'react-router-dom';
 // import { getToken } from "../auth";
 
 
@@ -7,32 +8,37 @@ const Home = (props) => {
     let description = '';
     let price = 0;
     let title = '';
+    const [postSuccess, setPostSuccess] = useState(false);
     const createPost = (event) => {
         event.preventDefault();
-        try {
-            fetch('https://strangers-things.herokuapp.com/api/2010-LSU-RM-WEB-PT/posts', {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
-                },
-                body: JSON.stringify({
-                    post: {
-                        title: title,
-                        description: description,
-                        price: price,
-                        // willDeliver: false
-                    }
-                })
+        fetch('https://strangers-things.herokuapp.com/api/2010-LSU-RM-WEB-PT/posts', {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            },
+            body: JSON.stringify({
+                post: {
+                    title: title,
+                    description: description,
+                    price: `$${price}`,
+                    // willDeliver: false
+                }
             })
-            .then(response => response.json())
-            .then(result => {
-                console.log(result);
-            })
-        } catch (error) {
-            console.error(error);
-        }
+        })
+        .then(response => response.json())
+        .then(result => {
+            console.log(result);
+            setPostSuccess(true);
+            alert('Post made successfully')
+        }).catch(console.error);
+        
     }
+    
+    if (postSuccess) {
+        return <Redirect to="/listings"/>;
+    }
+    
     return (
         <Fragment>
             <div>
@@ -48,8 +54,8 @@ const Home = (props) => {
             </div>
             {localStorage.getItem('token') ? 
                 <form className="input-box" onSubmit={createPost}>
-                    <h3>Make a post</h3>
                     <div className="container">
+                        <h1>Make a post</h1>
                         <label><b>Name of Item</b></label>
                         <input 
                             type="text" 
