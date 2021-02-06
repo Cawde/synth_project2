@@ -3,7 +3,7 @@ import { Redirect } from 'react-router-dom';
 
 
 const Login = (props) => {
-  const {loginSuccessful, setLoginSuccessful, user_id, setUserId} = props;
+  const {loginSuccessful, setLoginSuccessful} = props;
   let pass = '';
   let user = '';
 
@@ -30,7 +30,6 @@ const Login = (props) => {
         console.log(result);
         alert(result.success ? result.data.message : result.error.message);
         setLoginSuccessful(result.success);
-        setUserId(result.data._id)
         storeToken(result.data.token, user);
       }).catch(console.error);
   }
@@ -54,12 +53,11 @@ const loginUser = (event) => {
       alert(result.success ? result.data.message : result.error.message);
       setLoginSuccessful(result.success);
       storeToken(result.data.token, user);
-      console.log(localStorage.getItem('token'));
     }).catch(console.error);
 }
 
 if (loginSuccessful) {
-  return <Redirect to="/listings"/>;
+  return <Redirect to="/profile"/>;
 }
 
 
@@ -86,9 +84,6 @@ if (loginSuccessful) {
             placeholder="Enter Password" required
             onChange={(event)=> {pass = event.target.value}}
             />
-
-          <label><b>Confirm Password</b></label>
-          <input type="password" name="pass-repeat" placeholder="Repeat Password" pattern=".{5,16}" title="5 or more characters" size="10" required/>
           <hr/>
           <button
             type="submit" 

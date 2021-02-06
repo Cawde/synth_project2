@@ -1,78 +1,16 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 
 const Listings = (props) => {
-  const {listings, setListings} = props;
-  // const [postID, setPostID] = useState('');
-  useEffect(() => {
-    fetch('https://strangers-things.herokuapp.com/api/2010-LSU-RM-WEB-PT/posts')
-    .then(response => response.json())
-    .then(data => {
-      setListings(data.data.posts);
-      console.log(data.data.posts);
-    })
-    .catch(console.error);
-  }, [setListings]);
+  const [posts, setPosts] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  let message = '';
 
-  // const editField = (event) => {
-  //   event.preventDefault();
-  //   return (
-  //     <form className="input-box" onSubmit={createPost}>
-  //       <h3>Make a post</h3>
-  //       <div className="container">
-  //         <label><b>Name of Item</b></label>
-  //         <input 
-  //             type="text" 
-              
-  //             placeholder="Enter the name of your item."
-  //             onChange={(event)=> {title = event.target.value}}
-  //             />
-  //         <label><b>Description</b></label>
-  //         <input 
-  //             type="text" 
-              
-  //             placeholder="Enter the description of your item."
-  //             onChange={(event)=> {description = event.target.value}}
-  //             />
-  //             <label><b>Price</b></label>
-  //         <input 
-  //             type="number" 
-              
-  //             placeholder="Enter the price of your item."
-  //             onChange={(event)=> {price = event.target.value}}
-  //             />
-  //             <button
-  //                 type="submit" 
-  //                 className="registerbtn" 
-  //                 >Submit Post
-  //             </button>
-  //       </div>
-  //     </form>
-  //   )
-  // }
-
-  // const editPost = (event, post_id) => {
-  //   event.preventDefault();
-  //   fetch(`https://strangers-things.herokuapp.com/api/2010-LSU-RM-WEB-PT/posts/${post_id}`, {
-  //     method: "PATCH",
-  //     headers: {
-  //       'Content-Type' : 'application/json',
-  //       'Authorization' : `Bearer ${token}`
-  //     },
-  //     body: JSON.stringify({
-  //       post: {
-  //         title:'',
-  //         description: '',
-  //         price: ''
-  //       }
-  //     })
-  //   }).then(response => response.json())
-  //     .then(result => {
-  //       console.log(result);
-  //     }).catch(console.error)
-  // }
+  const postMatches = (post, text) => {
+    return post.author.username.toLowerCase().includes(text.toLowerCase()) || post.description.toLowerCase().includes(text.toLowerCase()) || post.price.toLowerCase().includes(text.toLowerCase());
+  }
 
   const deletePost = (post_id) => {
-    fetch(`https://strangers-things.herokuapp.com/api/COHORT-NAME/posts/${post_id}`, {
+    fetch(`https://strangers-things.herokuapp.com/api/2010-LSU-RM-WEB-PT/posts/${post_id}`, {
       method: "DELETE",
       headers: {
         'Content-Type': 'application/json',
@@ -80,36 +18,94 @@ const Listings = (props) => {
       }
     }).then(response => response.json())
       .then(result => {
-        setListings(result);
+        console.log(post_id);
+        console.log(result);
+        alert('Post successfully deleted!');
+        getPosts();
       }).catch(console.error);
   }
-  //do a use effect and change the state so it re renders, delete, do .value to pull the id
 
-  return listings ? (
+  const messageUser = (post_id) => {
+    fetch(`https://strangers-things.herokuapp.com/api/2010-LSU-RM-WEB-PT/posts/${post_id}`, {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      },
+      body: JSON.stringify({
+        message: {
+          content: {message}
+        }
+      })
+    }).then(response => response.json())
+      .then(result => {
+        console.log(result);
+      })
+      .catch(console.error);
+  }
+
+  const messageBox = (id) => {
+    return (
+      <div>
+        <form onSubmit={messageUser(id)}>
+          <input placeholder="Enter message here"/>
+        </form>
+      </div>
+    )
+  }
+
+  const getPosts = () => {
+    fetch('https://strangers-things.herokuapp.com/api/2010-LSU-RM-WEB-PT/posts')
+    .then(response => response.json())
+    .then(data => {
+      console.log(data.data.posts);
+      setPosts(data.data.posts)
+    })
+    .catch(console.error);
+  }
+  useEffect(() => {
+    getPosts();
+  }, []);
+
+  const filteredPosts = posts.filter(post => postMatches(post, searchTerm));
+  const postsToDisplay = searchTerm.length ? filteredPosts : posts;
+
+  return posts ? (
     <main id="listings">
       <div className="object-listings">
-        <h1>Listings</h1>
+        <div>
+          <h1>Search for listings below</h1>
+          <div className="input-div">
+              <form className="search-box">
+              <input 
+                  type="text" 
+                  placeholder="Search for listings here" 
+                  onChange={(event)=> {setSearchTerm(event.target.value)}}/>
+              </form>
+          </div>
+        </div>
+        <h1>{postsToDisplay.length} Listings</h1>
         <Fragment>
-            {listings ? listings.map((listing, index) => {
+            {postsToDisplay ? postsToDisplay.map((post, index) => {
               return (
                 <Fragment key={index} >
                   <header>
-                      <h3>{listing.title}</h3>
-                      <h4>Post Date: {listing.createdAt}</h4>
+                      <h3>{post.title}</h3>
+                      <h4>Post Date: {post.createdAt}</h4>
                   </header>
-                    <section className="details" value={listing._id}>
-                        <span className="title">{listing.description ? 'Description:' : ''}<p className="content">{listing.description ? listing.description : ''}</p></span>
-                        <span className="title">{listing.author.username ? "Seller:" : ''}<p className="content">{listing.author.username ? listing.author.username : ''}</p></span>  
-                        <span className="title">{listing.location ? "Location:" : ''}<p className="content">{listing.location ? listing.location : ''}</p></span>
-                        <span className="title">{listing.price ? "Price:" : ''}<p className="content price">{listing.price ? listing.price : ''}</p></span>
-                        <span className="title">{listing.updatedAt ? "Updated At:" : ''}<p className="content">{listing.updatedAt ? listing.updatedAt : ''}</p></span>
-                        <span className="title">{listing.willDeliver ? "Will Deliver:" : ''}<p className="content">{listing.willDeliver ? listing.willDeliver : ''}</p></span>
-                        {listing.author.username === localStorage.getItem('user') ? 
+                    <section className="details" value={post._id}>
+                        <span className="title">{post.description ? 'Description:' : ''}<p className="content">{post.description ? post.description : ''}</p></span>
+                        <span className="title">{post.author.username ? "Seller:" : ''}<p className="content">{post.author.username ? post.author.username : ''}</p></span>  
+                        <span className="title">{post.location ? "Location:" : ''}<p className="content">{post.location ? post.location : ''}</p></span>
+                        <span className="title">{post.price ? "Price:" : ''}<p className="content price">{post.price ? post.price : ''}</p></span>
+                        <span className="title">{post.updatedAt ? "Updated At:" : ''}<p className="content">{post.updatedAt ? post.updatedAt : ''}</p></span>
+                        <span className="title">{post.willDeliver ? "Will Deliver:" : ''}<p className="content">{post.willDeliver ? post.willDeliver : ''}</p></span>
+                        {post.author.username === localStorage.getItem('user') ? 
                         <Fragment>
-                          <button className="edit-button">Edit Post</button>
-                          <button className="delete-button" onClick={(event) => { event.preventDefault(); deletePost(event.target.value) }}>Delete Post</button>
+                          <button className="edit-button" onClick={(event) => {editField(event, post._id)}}>Edit Post</button>
+                          <button className="delete-button" onClick={() => { deletePost(post._id) }}>Delete Post</button>
                         </Fragment>
-                         : localStorage.getItem('user') && <button className="message-button">Message Poster</button>}
+                         : localStorage.getItem('user') && <button className="message-button" onClick={messageBox(post._id)}>Message Poster</button>}
                     </section>
                 </Fragment>
               )

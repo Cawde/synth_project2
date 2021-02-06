@@ -1,5 +1,6 @@
 body {
     background: #522622;
+    /* background:rgb(97, 27, 44); */
     color: white;
     font-family: 'Sriracha', cursive;
 
@@ -40,6 +41,11 @@ h3 {
     text-shadow: 2px 1px 2px black;
 }
 
+label {
+    font-size: 25px;
+    text-shadow: 2px 1px 2px black;
+}
+
 h4 {
     text-shadow: 2px 1px 2px black;
 }
@@ -60,12 +66,10 @@ h4 {
     align-items: center;
 }
 
-/* Add padding to containers */
 .container {
     padding: 16px;
 }
 
-/* Full-width input fields */
 input[type=text], input[type=password] {
     box-sizing: border-box;
     width: 100%;
@@ -82,7 +86,6 @@ input[type=text]:focus, input[type=password]:focus {
     outline: none;
 }
 
-/* Overwrite default styles of hr */
 hr {
     box-sizing: border-box;
     border: 1px solid #f1f1f1;
@@ -104,7 +107,6 @@ hr {
     align-items: center;
 }
 
-/* Set a style for the submit/register button */
 .registerbtn {
     box-sizing: border-box;
     background-color: #4CAF50;
@@ -226,56 +228,3 @@ hr {
  span p {
     display: inline;
  }
-
-/* .object-listings {
-    flex-grow: 1;
-  
-    display: grid;
-  
-    grid-template-columns: minmax(0, 1fr) 420px;
-    grid-template-rows: auto minmax(0, 1fr);
-
-    box-shadow: 0 4px 12px -3px black;
-} */
-  
-/* .object-listings > * {
-    padding: 8px;
-}
-  
-.object-listings header {
-    grid-row: 1;
-    grid-column: 1 / -1;
-  
-    background: steelblue;
-    color: white;
-    text-shadow: 1px 1px 2px black;
-    border-bottom: 1px solid black;
-  
-    font-size: 1.4rem;
-}
-  
-.object-listings .details {
-    grid-row: 2;
-    grid-column: 1;
-  
-    min-height: 0;
-    overflow-y: scroll;
-  
-    font-size: 1.2rem;
-  
-    display: grid;
-    grid-gap: 4px 12px;
-    grid-template-columns: max-content minmax(0, 1fr);
-    grid-template-rows: repeat(auto-fill, 2em);
-}
-
-.object-listings .details .title {
-    grid-column: 1;
-    font-weight: 900;
-}
-  
-.object-listings .details .content {
-    grid-column: 2;
-    font-weight: 100;
-}
-   */

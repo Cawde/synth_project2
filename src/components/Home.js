@@ -3,8 +3,7 @@ import { Redirect } from 'react-router-dom';
 // import { getToken } from "../auth";
 
 
-const Home = (props) => {
-    const {search, setSearch} = props;
+const Home = () => {
     let description = '';
     let price = 0;
     let title = '';
@@ -30,7 +29,7 @@ const Home = (props) => {
         .then(result => {
             console.log(result);
             setPostSuccess(true);
-            alert('Post made successfully')
+            alert('Post made successfully');
         }).catch(console.error);
         
     }
@@ -38,20 +37,9 @@ const Home = (props) => {
     if (postSuccess) {
         return <Redirect to="/listings"/>;
     }
-    
+
     return (
         <Fragment>
-            <div>
-                <h1>Search for listings below</h1>
-                <div className="input-div">
-                    <form className="search-box">
-                    <input 
-                        type="text" 
-                        placeholder="Search for listings here" 
-                        onChange={(event)=> {setSearch(event.target.value)}}/>
-                    </form>
-                </div>
-            </div>
             {localStorage.getItem('token') ? 
                 <form className="input-box" onSubmit={createPost}>
                     <div className="container">
