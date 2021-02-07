@@ -33,7 +33,7 @@ const App = () => {
             <li><Link to="/home">Home</Link></li>
             {localStorage.getItem('user') && <li><Link to="/profile">Profile</Link></li>}
             <li><Link to="/listings">Listings</Link></li>
-            {localStorage.getItem('user') ? <li onClick={logOut}><a href="#">Log Out of {localStorage.getItem('user')}</a></li> : <li><Link to="/login">Login</Link></li>}
+            {localStorage.getItem('user') ? <li onClick={logOut}><a href="/login">Log Out of {localStorage.getItem('user')}</a></li> : <li><Link to="/login">Login</Link></li>}
           </ul>
         </nav>
         <Route path="/home">
