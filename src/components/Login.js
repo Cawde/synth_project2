@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Redirect } from 'react-router-dom';
 
 
@@ -58,7 +58,7 @@ const loginUser = (event) => {
 
 if (loginSuccessful) {
   return <Redirect to="/profile"/>;
-}
+} 
 
 
   return (

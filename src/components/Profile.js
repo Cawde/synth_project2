@@ -27,19 +27,16 @@ const Profile = (props) => {
       },
       }).then(response => response.json())
       .then(data => {
-        setMessages(data.data.messages); 
+        setMessages(data.data.messages.filter(message=> message.fromUser.username !== localStorage.getItem('user'))); 
         setPosts(data.data.posts.filter(post => post.active));
         console.log(messages, posts);
       })
       .catch(console.error);
   }
+  
   useEffect(() => {
     getPosts();
   }, []);
-
-  
- 
-  
 
   return (
     <div>
@@ -51,16 +48,16 @@ const Profile = (props) => {
               return (
                 <Fragment key={index} >
                   <header>
+                    <h3>From: {message.fromUser.username}</h3>
+                    
                   </header>
                   <section className="details">
-                      <p>Post: {message.post.title}</p>
-                      <p>From: {message.fromUser.username}</p>
-                      <span className="title"><p className="content">{message.content ? message.content : ''}</p></span>
-                      <button className="message-button">Reply</button>
+                    <p>Post: {message.post.title}</p>
+                    <span className="title"><p className="content">{message.content ? message.content : ''}</p></span>
                   </section>
                 </Fragment>
               )
-            }): null}  
+            }): <h3>Your messages will be here when you get them!</h3>}  
           </Fragment>
       </div>
       <div>

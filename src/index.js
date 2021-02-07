@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
-import { Button } from '@material-ui/core';
 import {
   BrowserRouter as Router,
   Link,
@@ -13,23 +12,16 @@ import {
   Header,
   Listings,
   Profile,
-  Login,
-  Footer
+  Login
  } from './components';
 
 const App = () => {
-  //Potential state
-  //Logged in or not
   const [loginSuccessful, setLoginSuccessful] = useState(false);
   const [posts, setPosts] = useState([]);
-  //user information
-  //create log out function that calls all pieces of state back to their original.
-  //clear local storage
   const logOut = () => {
     setLoginSuccessful(false);
     setPosts([]);
     localStorage.clear();
-    return <Redirect to="/login"/>;
   }
 
   return (

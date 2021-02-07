@@ -1,9 +1,9 @@
 import React, { Fragment, useEffect, useState } from 'react';
 
-const Listings = (props) => {
+const Listings = () => {
   const [posts, setPosts] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
-  let message = '';
+  const [content, setContent] = useState('');
 
   const postMatches = (post, text) => {
     return post.author.username.toLowerCase().includes(text.toLowerCase()) || post.description.toLowerCase().includes(text.toLowerCase()) || post.price.toLowerCase().includes(text.toLowerCase());
@@ -25,33 +25,26 @@ const Listings = (props) => {
       }).catch(console.error);
   }
 
-  const messageUser = (post_id) => {
-    fetch(`https://strangers-things.herokuapp.com/api/2010-LSU-RM-WEB-PT/posts/${post_id}`, {
+  const messageUser = (id) => {
+    fetch(`https://strangers-things.herokuapp.com/api/2010-LSU-RM-WEB-PT/posts/${id}/messages`, {
       method: "POST",
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
+        'Authorization' : `Bearer ${localStorage.getItem('token')}`
       },
       body: JSON.stringify({
         message: {
-          content: {message}
+          content: content,
         }
       })
     }).then(response => response.json())
       .then(result => {
         console.log(result);
+        alert(`Message: ${content}. Sent successfully!`);
+        setContent('');
       })
       .catch(console.error);
-  }
-
-  const messageBox = (id) => {
-    return (
-      <div>
-        <form onSubmit={messageUser(id)}>
-          <input placeholder="Enter message here"/>
-        </form>
-      </div>
-    )
+      event.target.reset()
   }
 
   const getPosts = () => {
@@ -103,9 +96,18 @@ const Listings = (props) => {
                         {post.author.username === localStorage.getItem('user') ? 
                         <Fragment>
                           <button className="edit-button" onClick={(event) => {editField(event, post._id)}}>Edit Post</button>
-                          <button className="delete-button" onClick={() => { deletePost(post._id) }}>Delete Post</button>
+                          <button className="delete-button" onClick={() => {deletePost(post._id)}}>Delete Post</button>
                         </Fragment>
-                         : localStorage.getItem('user') && <button className="message-button" onClick={messageBox(post._id)}>Message Poster</button>}
+                         : localStorage.getItem('user') && 
+                         <form onSubmit={(event)=> {event.preventDefault(), messageUser(post._id)}}>
+                           <div className="container">
+                            <input type="text" placeholder="Leave message here" onChange={(event) => {setContent(event.target.value)}}/>
+                            <button className="message-button">
+                              Message Poster
+                            </button>
+                          </div>
+                         </form>
+                          }
                     </section>
                 </Fragment>
               )
